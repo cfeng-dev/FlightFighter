@@ -63,20 +63,42 @@ void initialize(Player *player, Enemy *enemy, Bullet *bullet, int *high, int *wi
 // Function to draw the game entities on the screen
 void draw(Player player, Enemy enemy, Bullet bullet, int high, int width) {
     gotoxy(0, 0);
+    
+    // Draw the top border of the game area
+    for (int j = 0; j < width + 2; j++) {
+        printf("#");
+    }
+    printf("\n");
+    
     for (int i = 0; i < high; i++) {
+        // Draw the left border of the game area
+        printf("#");
+        
         for (int j = 0; j < width; j++) {
+            // Check and draw player, enemy, or bullet if their position matches
             if (i == player.position.x && j == player.position.y) {
                 printf("*"); // The aircraft
             } else if (i == enemy.position.x && j == enemy.position.y) {
                 printf("V"); // The enemy
             } else if (i == bullet.position.x && j == bullet.position.y) {
-                printf("|"); // The bullet 
+                printf("|"); // The bullet
             } else {
+                // Print space if no player, enemy, or bullet is in the current position
                 printf(" ");
             }
         }
-        printf("\n");
+        
+        // Draw the right border of the game area
+        printf("#\n");
     }
+    
+    // Draw the bottom border of the game area
+    for (int j = 0; j < width + 2; j++) {
+        printf("#");
+    }
+    printf("\n");
+
+    // Display the player's current score
     printf("Score: %d\n", player.score);
 }
 
