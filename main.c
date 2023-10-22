@@ -20,6 +20,7 @@ typedef struct {
 typedef struct {
     Position position;
     int score;
+	int lives;
 } Player;
 
 // Enemy struct with a position
@@ -52,6 +53,7 @@ void initialize(Player *player, Enemy *enemy, Bullet *bullet, int *high, int *wi
     player->position.x = 10;
     player->position.y = 15;
     player->score = 0;
+	player->lives = 3;
     bullet->position.x = -1;
     bullet->position.y = -1;
     enemy->position.x = rand() % *high;
@@ -99,7 +101,7 @@ void draw(Player player, Enemy enemy, Bullet bullet, int high, int width) {
     printf("\n");
 
     // Display the player's current score
-    printf("Score: %d\n", player.score);
+    printf("Score: %d Lives: %d\n", player.score, player.lives);
 }
 
 // Function to update the game state without user input
@@ -121,6 +123,17 @@ void updateWithoutInput(Player *player, Enemy *enemy, Bullet *bullet, int high, 
         enemy->position.x = -1; // New enemy
         enemy->position.y = rand() % width;
     }
+	
+	if (enemy->position.x >= high) {
+    player->lives--;
+    enemy->position.x = -1;
+    enemy->position.y = rand() % width;
+	}
+	
+	if (player->lives <= 0) {
+    printf("Game Over!\n");
+    exit(0);
+	}
 
     if (speed < 10) {
         speed++;
@@ -159,8 +172,7 @@ void updateWithInput(Player *player, Bullet *bullet, int high, int width) {
                     player->position.x++;
                 }
                 break;
-            case ' ':
-				// Shooting
+            case ' ': // Shooting
                 bullet->position.x = player->position.x - 1;
                 bullet->position.y = player->position.y;
                 break;
