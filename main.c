@@ -125,14 +125,20 @@ void updateWithoutInput(Player *player, Enemy *enemy, Bullet *bullet, int high, 
     }
 	
 	if (enemy->position.x >= high) {
-    player->lives--;
-    enemy->position.x = -1;
-    enemy->position.y = rand() % width;
+		player->lives--; // Player loses a life
+		enemy->position.x = -1;
+		enemy->position.y = rand() % width;
 	}
 	
+	if (enemy->position.x == player->position.x && enemy->position.y == player->position.y) {
+        player->lives--;  // Player loses a life
+        enemy->position.x = -1;
+        enemy->position.y = rand() % width;
+    }
+	
 	if (player->lives <= 0) {
-    printf("Game Over!\n");
-    exit(0);
+		printf("Game Over!\n");
+		exit(0);
 	}
 
     if (speed < 10) {
@@ -172,13 +178,13 @@ void updateWithInput(Player *player, Bullet *bullet, int high, int width) {
                     player->position.x++;
                 }
                 break;
-            case ' ': // Shooting
-                bullet->position.x = player->position.x - 1;
-                bullet->position.y = player->position.y;
+            case ' ':	// Shooting
+				bullet->position.x = player->position.x - 1;
+				bullet->position.y = player->position.y;
                 break;
+				
             default:
-                
-                break;
+				break;
         }
     }
 }
@@ -188,7 +194,7 @@ int main() {
     Enemy enemy;
     Bullet bullet;
     int high, width;
-
+	
 	system("cls");
     initialize(&player, &enemy, &bullet, &high, &width);
 
